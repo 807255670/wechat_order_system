@@ -16,7 +16,13 @@
         <filter class="ch.qos.logback.classic.filter.LevelFilter">
             <level>ERROR</level>
             <onMatch>DENY</onMatch> <!--禁止掉这个级别-->
-            <onMismatch>ACCEPT</onMismatch>
+            <onMismatch>NEUTRAL</onMismatch>
+        </filter>
+        <!--过滤，针对某一种级别设置规则-->
+        <filter class="ch.qos.logback.classic.filter.LevelFilter">
+            <level>WARN</level>
+            <onMatch>DENY</onMatch> <!--禁止掉这个级别-->
+            <onMismatch>NEUTRAL</onMismatch>
         </filter>
 
         <encoder>
@@ -28,6 +34,31 @@
         <rollingPolicy class="ch.qos.logback.core.rolling.TimeBasedRollingPolicy">
             <!--路径-->
             <fileNamePattern>E:\projects\wechat_log\info.%d.log</fileNamePattern>
+        </rollingPolicy>
+    </appender>
+
+    <!--warn日志文件-->
+    <appender name="fileWarnLog" class="ch.qos.logback.core.rolling.RollingFileAppender">
+        <!--过滤，针对某一种级别设置规则-->
+        <filter class="ch.qos.logback.classic.filter.LevelFilter">
+            <level>ERROR</level>
+            <onMatch>DENY</onMatch> <!--禁止掉这个级别-->
+            <onMismatch>NEUTRAL</onMismatch>
+        </filter>
+        <filter class="ch.qos.logback.classic.filter.LevelFilter">
+            <level>INFO</level>
+            <onMatch>DENY</onMatch> <!--禁止掉这个级别-->
+            <onMismatch>NEUTRAL</onMismatch>
+        </filter>
+        <encoder>
+            <pattern>
+                %d - %msg%n
+            </pattern>
+        </encoder>
+        <!--滚动策略-->
+        <rollingPolicy class="ch.qos.logback.core.rolling.TimeBasedRollingPolicy">
+            <!--路径-->
+            <fileNamePattern>E:\projects\wechat_log\warn.%d.log</fileNamePattern>
         </rollingPolicy>
     </appender>
 
@@ -51,6 +82,7 @@
     <root level="info">
         <appender-ref ref="consoleLog"/>
         <appender-ref ref="fileInfoLog"/>
+        <appender-ref ref="fileWarnLog"/>
         <appender-ref ref="fileErrorLog"/>
     </root>
 

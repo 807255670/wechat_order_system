@@ -20,10 +20,11 @@ public class LoggerTest {
 //        logger.debug("debug...");
 //        logger.info("info...");
 //        logger.error("error...");
-        String username = "root";
-        String password = "123456";
-        log.debug("debug..");
-        log.info("username: {},password:{}",username,password);
-        log.error("error...");
+        /*String username = "root";
+        String password = "123456";*/
+        /*log.debug("debug..");
+        log.info("info...");
+        log.warn("warn...");
+        log.error("error...");*/
     }
 }
