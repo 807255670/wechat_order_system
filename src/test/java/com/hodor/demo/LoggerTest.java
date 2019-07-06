@@ -22,9 +22,9 @@ public class LoggerTest {
 //        logger.error("error...");
         /*String username = "root";
         String password = "123456";*/
-        /*log.debug("debug..");
+        log.debug("debug..");
         log.info("info...");
         log.warn("warn...");
-        log.error("error...");*/
+        log.error("error...");
     }
 }
