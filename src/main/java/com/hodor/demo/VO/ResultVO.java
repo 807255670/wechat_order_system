@@ -1,5 +1,6 @@
 package com.hodor.demo.VO;
 
+import com.fasterxml.jackson.databind.annotation.JsonSerialize;
 import lombok.Data;
 
 import java.util.List;
@@ -10,6 +11,7 @@ import java.util.List;
  * 2019-07-07 11:54
  */
 @Data
+//@JsonSerialize(include = JsonSerialize.Inclusion.NON_NULL)
 public class ResultVO<T> {
 
     /*错误码*/

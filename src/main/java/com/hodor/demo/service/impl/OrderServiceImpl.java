@@ -71,8 +71,9 @@ public class OrderServiceImpl implements OrderService {
 
         //写入订单数据库
         OrderMaster orderMaster = new OrderMaster();
+        orderDTO.setOrderId(orderId);
         BeanUtils.copyProperties(orderDTO,orderMaster); //注意先拷贝 防止覆盖下面两条数据
-        orderMaster.setOrderId(orderId);
+
         orderMaster.setOrderAmount(orderAmount);
 
         orderMasterDao.save(orderMaster);
@@ -148,12 +149,42 @@ public class OrderServiceImpl implements OrderService {
     }
 
     @Override
+    @Transactional
     public OrderDTO finish(OrderDTO orderDTO) {
-        return null;
+        //判断状态
+        if(!orderDTO.getOrderStatus().equals(OrderStatus.NEW.getCode())){
+            throw new SellException(ResultEnum.order_status_error);
+        }
+        //修改状态
+        orderDTO.setOrderStatus(OrderStatus.FINISH.getCode());
+        OrderMaster ordermaster = new OrderMaster();
+        BeanUtils.copyProperties(orderDTO,ordermaster);
+        OrderMaster updateResult = orderMasterDao.save(ordermaster);
+        if(updateResult == null){
+            throw new SellException(ResultEnum.order_update_fail);
+        }
+       return orderDTO;
     }
 
     @Override
+    @Transactional
     public OrderDTO paid(OrderDTO orderDTO) {
-        return null;
+        //判断订单状态
+        if(!orderDTO.getOrderStatus().equals(OrderStatus.NEW.getCode())){
+            throw new SellException(ResultEnum.order_status_error);
+        }
+        //判断支付状态
+        if(!orderDTO.getPayStatus().equals(PayStatus.WAIT.getCode())){
+            throw new SellException(ResultEnum.order_pay_status_error);
+        }
+        //修改支付状态
+        orderDTO.setPayStatus(PayStatus.SUCCESS.getCode());
+        OrderMaster ordermaster = new OrderMaster();
+        BeanUtils.copyProperties(orderDTO,ordermaster);
+        OrderMaster updateResult = orderMasterDao.save(ordermaster);
+        if(updateResult == null){
+            throw new SellException(ResultEnum.order_update_fail);
+        }
+        return orderDTO;
     }
 }

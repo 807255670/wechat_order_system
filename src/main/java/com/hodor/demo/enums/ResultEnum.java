@@ -10,13 +10,17 @@ import lombok.Getter;
 @Getter
 public enum ResultEnum {
 
-    product_not_exit(10,"商品不存在"),
+    param_error(0,"参数错误"),
     product_stock_error(1,"库存不足"),
     order_not_exit(2,"订单不存在"),
     order_detail_not_exit(3,"订单详情不存在"),
     order_status_error(4,"订单状态错误"),
     order_update_fail(5,"订单更新失败"),
-    order_detail_empty(6,"订单中无商品")
+    order_detail_empty(6,"订单中无商品"),
+    order_pay_status_error(7,"订单支付状态不正确"),
+    cart_empty(8,"购物车为空"),
+    order_owner_error(9,"订单不属于该用户"),
+    product_not_exit(10,"商品不存在")
     ;
 
     private Integer code;

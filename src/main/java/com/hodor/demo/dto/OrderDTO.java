@@ -1,8 +1,10 @@
 package com.hodor.demo.dto;
 
+import com.fasterxml.jackson.databind.annotation.JsonSerialize;
 import com.hodor.demo.dataobject.OrderDetail;
 import com.hodor.demo.enums.OrderStatus;
 import com.hodor.demo.enums.PayStatus;
+import com.hodor.demo.utils.serializer.Date2LongSerializer;
 import lombok.Data;
 
 import java.math.BigDecimal;
@@ -14,6 +16,7 @@ import java.util.List;
  * 2019-07-08 20:40
  */
 @Data
+//@JsonSerialize(include = JsonSerialize.Inclusion.NON_NULL) 字段内容为null不返回
 public class OrderDTO {
 
     private String orderId;
@@ -32,8 +35,10 @@ public class OrderDTO {
 
     private Integer payStatus = PayStatus.WAIT.getCode();
 
+    @JsonSerialize(using = Date2LongSerializer.class)
     private Date createTime;
 
+    @JsonSerialize(using = Date2LongSerializer.class)
     private Date updateTime;
 
     private List<OrderDetail> orderDetailList;
