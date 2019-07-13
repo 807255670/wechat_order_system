@@ -9,6 +9,7 @@ import com.hodor.demo.exception.SellException;
 import com.hodor.demo.service.ProductService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Service;
 
 import org.springframework.data.domain.Pageable;
@@ -49,7 +50,18 @@ public class ProductServiceImpl implements ProductService {
     }
 
     @Override
+    @Transactional
     public void increaseStock(List<CartDTO> cartDTOList) {
+        for(CartDTO cartDTO:cartDTOList){
+            ProductInfo productInfo = productInfoDao.
+                    findById(cartDTO.getProductId()).get();
+            if(productInfo == null){
+                throw new SellException(ResultEnum.product_not_exit);
+            }
+            Integer result = productInfo.getProductStock() + cartDTO.getProductQuantity();
+            productInfo.setProductStock(result);
+            productInfoDao.save(productInfo);
+        }
 
     }
 
