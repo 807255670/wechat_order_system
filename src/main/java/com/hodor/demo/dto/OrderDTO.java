@@ -1,9 +1,11 @@
 package com.hodor.demo.dto;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.databind.annotation.JsonSerialize;
 import com.hodor.demo.dataobject.OrderDetail;
 import com.hodor.demo.enums.OrderStatus;
 import com.hodor.demo.enums.PayStatus;
+import com.hodor.demo.utils.EnumUtil;
 import com.hodor.demo.utils.serializer.Date2LongSerializer;
 import lombok.Data;
 
@@ -43,5 +45,14 @@ public class OrderDTO {
 
     private List<OrderDetail> orderDetailList;
 
+    @JsonIgnore
+    public OrderStatus getOrderStatusEnum(){
+        return EnumUtil.getByCode(orderStatus,OrderStatus.class);
+    }
+
+    @JsonIgnore
+    public PayStatus getPayStatusEnum(){
+        return EnumUtil.getByCode(payStatus,PayStatus.class);
+    }
 
 }

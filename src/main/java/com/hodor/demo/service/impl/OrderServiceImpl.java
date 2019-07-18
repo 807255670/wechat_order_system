@@ -54,8 +54,10 @@ public class OrderServiceImpl implements OrderService {
 
         //查询商品
         for(OrderDetail orderDetail:orderDTO.getOrderDetailList()){
-            ProductInfo productInfo = productService.findOne(orderDetail.getProductId());
-            if(productInfo == null){
+            ProductInfo productInfo;
+            try{
+                productInfo = productService.findOne(orderDetail.getProductId());
+            }catch (Exception e){
                 throw new SellException(ResultEnum.product_not_exit);
             }
             //计算总价
@@ -90,12 +92,12 @@ public class OrderServiceImpl implements OrderService {
 
     @Override
     public OrderDTO findOne(String orderId) {
-
-        OrderMaster orderMaster = orderMasterDao.findById(orderId).get();
-        if(orderMaster == null){
+        OrderMaster orderMaster;
+        try{
+            orderMaster = orderMasterDao.findById(orderId).get();
+        }catch (Exception e){
             throw new SellException(ResultEnum.order_not_exit);
         }
-
         List<OrderDetail> orderDetailList = orderDetailDao.findByOrderId(orderId);
         if(CollectionUtils.isEmpty(orderDetailList)){
             throw new SellException(ResultEnum.order_detail_not_exit);
@@ -124,6 +126,7 @@ public class OrderServiceImpl implements OrderService {
         OrderMaster orderMaster = new OrderMaster();
         //判断订单状态
         if(!orderDTO.getOrderStatus().equals(OrderStatus.NEW.getCode())){
+           // System.out.println(orderDTO.getOrderStatus()+"  fff");
             throw new SellException(ResultEnum.order_status_error);
         }
         //转换订单状态
@@ -186,5 +189,15 @@ public class OrderServiceImpl implements OrderService {
             throw new SellException(ResultEnum.order_update_fail);
         }
         return orderDTO;
+    }
+
+    @Override
+    public Page<OrderDTO> findList(Pageable pageable) {
+        Page<OrderMaster> orderMasterPage = orderMasterDao.findAll(pageable);
+        List<OrderDTO> orderDTOList = OrderMaster2OrderDTO.
+                convert(orderMasterPage.getContent());
+
+        return new PageImpl<OrderDTO>(
+                orderDTOList,pageable,orderMasterPage.getTotalElements());
     }
 }
