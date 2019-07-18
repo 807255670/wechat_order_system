@@ -65,4 +65,46 @@ public class SellerOrderController {
         return new ModelAndView("/common/success",map);
     }
 
+    /*
+     * 订单详情
+     * @param orderId
+     * @return
+     * */
+    @GetMapping("/detail")
+    public ModelAndView detail(@RequestParam("orderId") String orderId,
+                               Map<String,Object> map){
+        OrderDTO orderDTO;
+        try {
+           orderDTO = orderService.findOne(orderId);
+        }catch (SellException e){
+           map.put("msg", e.getMessage());
+           map.put("url","/wechat_order/seller/order/list");
+           return new ModelAndView("common/error",map);
+        }
+        map.put("orderDTO",orderDTO);
+        return new ModelAndView("/order/detail",map);
+    }
+
+    /*
+     * 完结订单
+     * @param orderId
+     * @return
+     * */
+    @GetMapping("/finish")
+    public ModelAndView finish(@RequestParam("orderId") String orderId,
+                               Map<String,Object> map) {
+        OrderDTO orderDTO;
+        try {
+            orderDTO = orderService.findOne(orderId);
+            orderService.finish(orderDTO);
+        }catch (SellException e){
+            map.put("msg", e.getMessage());
+            map.put("url","/wechat_order/seller/order/list");
+            return new ModelAndView("common/error",map);
+        }
+        map.put("msg", ResultEnum.order_finish_success.getMessage());
+        map.put("url","/wechat_order/seller/order/list");
+        return new ModelAndView("/common/success",map);
+    }
+
 }

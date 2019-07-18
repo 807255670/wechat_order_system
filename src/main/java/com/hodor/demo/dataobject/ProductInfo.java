@@ -1,11 +1,15 @@
 package com.hodor.demo.dataobject;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.hodor.demo.enums.ProductStatus;
+import com.hodor.demo.utils.EnumUtil;
 import lombok.Data;
 import org.hibernate.annotations.DynamicUpdate;
 
 import javax.persistence.Entity;
 import javax.persistence.Id;
 import java.math.BigDecimal;
+import java.util.Date;
 
 /**
  * 商品
@@ -15,6 +19,7 @@ import java.math.BigDecimal;
 
 @Entity
 @Data
+@DynamicUpdate
 public class ProductInfo {
 
     @Id
@@ -38,17 +43,12 @@ public class ProductInfo {
     /*类目编号*/
     private Integer categoryType;
 
-    @Override
-    public String toString() {
-        return "ProductInfo{" +
-                "productId='" + productId + '\'' +
-                ", productName='" + productName + '\'' +
-                ", productPrice=" + productPrice +
-                ", productStock=" + productStock +
-                ", productDescription='" + productDescription + '\'' +
-                ", productIcon='" + productIcon + '\'' +
-                ", productStatus=" + productStatus +
-                ", categoryType=" + categoryType +
-                '}';
+    private Date createTime;
+
+    private Date updateTime;
+
+    @JsonIgnore
+    public ProductStatus getProductStatusEnum() {
+        return EnumUtil.getByCode(productStatus, ProductStatus.class);
     }
 }

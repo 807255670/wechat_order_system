@@ -12,6 +12,7 @@ import org.springframework.data.domain.PageRequest;
 import org.springframework.test.context.junit4.SpringRunner;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 
 import static org.junit.Assert.*;
@@ -26,23 +27,37 @@ public class OrderServiceImplTest {
     @Test
     public void create() {
         OrderDTO orderDTO = new OrderDTO();
-        orderDTO.setBuyerAddress("徐家汇");
-        orderDTO.setBuyerName("fhl");
-        orderDTO.setBuyerPhone("465");
-        orderDTO.setBuyerOpenid("123456");
+        orderDTO.setBuyerAddress("农行");
+        orderDTO.setBuyerName("袁金海");
+        orderDTO.setBuyerPhone("15600000000");
+        orderDTO.setBuyerOpenid("5hhh6dss");
 
-        List<OrderDetail> orderDetailList = new ArrayList<>();
 
         OrderDetail o1 = new OrderDetail();
-        o1.setProductId("123456");
+        o1.setProductId("1007");
         o1.setProductQuantity(2);
 
         OrderDetail o2 = new OrderDetail();
-        o2.setProductId("1234567");
-        o2.setProductQuantity(3);
-        orderDetailList.add(o1);
-        orderDetailList.add(o2);
-        orderDTO.setOrderDetailList(orderDetailList);
+        o2.setProductId("1006");
+        o2.setProductQuantity(1);
+
+        OrderDetail o3 = new OrderDetail();
+        o3.setProductId("1005");
+        o3.setProductQuantity(5);
+
+        OrderDetail o4 = new OrderDetail();
+        o4.setProductId("1004");
+        o4.setProductQuantity(4);
+
+        orderDTO.setOrderDetailList(Arrays.asList(o1,o2,o3,o4));
+        orderService.create(orderDTO);
+        orderDTO.setOrderDetailList(Arrays.asList(o1,o2,o3));
+        orderService.create(orderDTO);
+        orderDTO.setOrderDetailList(Arrays.asList(o1,o4));
+        orderService.create(orderDTO);
+        orderDTO.setOrderDetailList(Arrays.asList(o2,o3));
+        orderService.create(orderDTO);
+        orderDTO.setOrderDetailList(Arrays.asList(o2,o3,o4));
         orderService.create(orderDTO);
     }
 

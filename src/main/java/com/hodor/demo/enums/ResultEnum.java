@@ -22,7 +22,8 @@ public enum ResultEnum {
     cart_empty(8,"购物车为空"),
     order_owner_error(9,"订单不属于该用户"),
     product_not_exit(10,"商品不存在"),
-    order_cancel_success(11,"订单取消成功")
+    order_cancel_success(11,"订单取消成功"),
+    order_finish_success(12,"订单完结成功")
     ;
 
     private Integer code;
