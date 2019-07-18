@@ -23,7 +23,8 @@ public enum ResultEnum {
     order_owner_error(9,"订单不属于该用户"),
     product_not_exit(10,"商品不存在"),
     order_cancel_success(11,"订单取消成功"),
-    order_finish_success(12,"订单完结成功")
+    order_finish_success(12,"订单完结成功"),
+    product_status_error(13,"商品状态错误")
     ;
 
     private Integer code;

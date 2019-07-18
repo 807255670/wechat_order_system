@@ -61,4 +61,10 @@ public class ProductServiceImplTest {
 
         System.out.println(result.toString());
     }
+
+    @Test
+    public void onsale(){
+        ProductInfo result = productService.onSale("1000");
+        System.out.println(result.getProductStatusEnum());
+    }
 }

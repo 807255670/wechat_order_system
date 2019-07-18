@@ -81,4 +81,36 @@ public class ProductServiceImpl implements ProductService {
             productInfoDao.save(productInfo);
         }
     }
+
+    @Override
+    public ProductInfo onSale(String productId) {
+        ProductInfo productInfo;
+        try{
+            productInfo = productInfoDao.findById(productId).get();
+        }catch (Exception e){
+            throw new SellException(ResultEnum.product_not_exit);
+        }
+        if(productInfo.getProductStatus() != ProductStatus.DOWN.getCode()){
+            throw new SellException(ResultEnum.product_status_error);
+        }
+        //更新
+        productInfo.setProductStatus(ProductStatus.UP.getCode());
+        return productInfoDao.save(productInfo);
+    }
+
+    @Override
+    public ProductInfo offSale(String productId) {
+        ProductInfo productInfo;
+        try{
+            productInfo = productInfoDao.findById(productId).get();
+        }catch (Exception e){
+            throw new SellException(ResultEnum.product_not_exit);
+        }
+        if(productInfo.getProductStatus() == ProductStatus.DOWN.getCode()){
+            throw new SellException(ResultEnum.product_status_error);
+        }
+        //更新
+        productInfo.setProductStatus(ProductStatus.DOWN.getCode());
+        return productInfoDao.save(productInfo);
+    }
 }
