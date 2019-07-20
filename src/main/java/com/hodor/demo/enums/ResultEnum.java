@@ -24,7 +24,10 @@ public enum ResultEnum {
     product_not_exit(10,"商品不存在"),
     order_cancel_success(11,"订单取消成功"),
     order_finish_success(12,"订单完结成功"),
-    product_status_error(13,"商品状态错误")
+    product_status_error(13,"商品状态错误"),
+    login_fail(14,"登录失败,用户未注册"),
+    logout_success(15,"登出成功"),
+    auth_error(16,"授权失败")
     ;
 
     private Integer code;

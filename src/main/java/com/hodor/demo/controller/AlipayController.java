@@ -1,21 +1,27 @@
 package com.hodor.demo.controller;
 
 import com.hodor.demo.dataobject.AlipayUser;
+import com.hodor.demo.enums.ResultEnum;
 import com.hodor.demo.service.impl.AlipayLoginService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Controller;
 import org.springframework.util.StringUtils;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.servlet.ModelAndView;
 
+import javax.servlet.ServletException;
 import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import java.io.IOException;
+import java.util.Map;
 
 /**
  * Created By Fan Huiliang
  * 2019-07-14 15:01
  */
-@RestController
+@Controller
 @RequestMapping("/alipay")
 public class AlipayController {
 
@@ -23,39 +29,22 @@ public class AlipayController {
     private AlipayLoginService alipayLoginService;
 
     @RequestMapping("/auth")
-    public String getAuthCode(HttpServletRequest request, HttpServletResponse response) throws Exception {
+    public ModelAndView getAuthCode(HttpServletRequest request,HttpServletResponse response,
+                                    Map<String,Object> map) throws ServletException, IOException {
         System.out.println("支付宝返回信息....................................................");
         //从request中获取授权信息
         String authCode = request.getParameter("auth_code");
-        String appID = request.getParameter("app_id");
-        String scope = request.getParameter("scope");
 
         if (!StringUtils.isEmpty(authCode)) {
-            //获取access_token
-            String accessToken = alipayLoginService.getAccessToken(authCode);
-            System.out.println("accessToken: "+accessToken);
-            //获取用户信息
-            if (!StringUtils.isEmpty(accessToken)) {
-                //获取用户信息
-                AlipayUser alipayUser = alipayLoginService.getUserInfoByToken(accessToken);
-
-
-                /*//存储到cookie中
-                Cookie cookieName = new Cookie("account", alipayUser.getNickName());
-                Cookie cookieRole = new Cookie("roleName", "支付宝账户");
-                cookieName.setMaxAge(3600);
-                cookieRole.setMaxAge(3600);
-                cookieName.setPath("/");
-                cookieRole.setPath("/");
-                response.addCookie(cookieName);
-                response.addCookie(cookieRole);
-                //跳转至主界面
-                response.sendRedirect("http://106.14.149.152:80/");*/
-
-            }
+            //获取userid
+            String userid = alipayLoginService.getUserid(authCode);
+            System.out.println("userid: "+userid);
+            request.setAttribute("userid",userid);
+            request.getRequestDispatcher("/seller/auth").forward(request,response);
         }
-
-        return "hello alipay!";
+        map.put("msg", ResultEnum.auth_error.getMessage());
+        map.put("url","/wechat_order/seller/login");
+        return new ModelAndView("common/error",map);
     }
 }
 

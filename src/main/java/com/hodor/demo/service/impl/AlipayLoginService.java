@@ -70,52 +70,18 @@ public class AlipayLoginService implements InitializingBean {
      * @param authCode
      * @return
      */
-    public String getAccessToken(String authCode) {
+    public String getUserid(String authCode) {
         AlipaySystemOauthTokenRequest request = new AlipaySystemOauthTokenRequest();
         request.setCode(authCode);
         request.setGrantType("authorization_code");
         try {
             AlipaySystemOauthTokenResponse oauthTokenResponse = alipayClient.execute(request);
-            return oauthTokenResponse.getAccessToken();
+            return oauthTokenResponse.getUserId();
         } catch (Exception e) {
-
             LOGGER.error("使用authCode获取信息失败！", e);
             return null;
         }
     }
 
-    /**
-     * 根据access_token获取用户信息
-     * @param token
-     * @return
-     */
-    public AlipayUser getUserInfoByToken(String token) {
-        AlipayUserInfoShareRequest request = new AlipayUserInfoShareRequest ();
-        try {
-            AlipayUserInfoShareResponse response =  alipayClient.execute(request, token);
-            if (response.isSuccess()) {
-                //打印响应信息
-//                System.out.println(ReflectionToStringBuilder.toString(response));
-                //封装支付宝对象信息
-                AlipayUser alipayUser = new AlipayUser();
-                alipayUser.setAddress(response.getAddress());
-                alipayUser.setCertNo(response.getCertNo());
-                alipayUser.setCity(response.getCity());
-                alipayUser.setCollegeName(response.getCollegeName());
-                alipayUser.setDegree(response.getDegree());
-                alipayUser.setMobile(response.getMobile());
-                alipayUser.setPhone(response.getPhone());
-                alipayUser.setProvince(response.getProvince());
-                alipayUser.setUserName(response.getUserName());
-                alipayUser.setNickName(response.getNickName());
-                return alipayUser;
-            }
-            LOGGER.error("根据 access_token获取用户信息失败!");
-            return null;
 
-        } catch (Exception e) {
-            LOGGER.error("根据 access_token获取用户信息抛出异常！", e);
-            return null;
-        }
-    }
 }
