@@ -34,7 +34,7 @@ public class SellerController {
     public String login(){
         return "redirect:"+"https://openauth.alipay.com/oauth2/publicAppAuthorize.htm?"+
                 "app_id=2019071465849264&scope=auth_user&redirect_uri="+
-                "http://4xejbw.natappfree.cc/wechat_order/alipay/auth";
+                "http://cuj799.natappfree.cc/wechat_order/alipay/auth";
     }
 
     @GetMapping("/auth")
